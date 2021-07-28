@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block more_style %}
+<style>
+button {
+  background-color: #12c064;
+  color: #f3f7cc;
+  padding: 10px 0;
+  margin: 8px 0;
+  border: none;
+  cursor: grabbing;
+  width: 90px;
+}
+button:hover {
+  color: #fff;
+}
+</style>
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <p>Are you sure to delete {{ object }}?</p>
+        <form method="post">
+          <button class="btn btn-danger">Delete</button>
+          &ensp;
+          <button class="btn btn-danger" name="cancel">Cancel</button>
+          {% csrf_token %}
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

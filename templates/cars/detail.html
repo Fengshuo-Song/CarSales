@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}{{car.year}} {{ car.brand }} {{ car.model }} {{ car.trim }}{% endblock %}
+
+{% block more_style %}
+<style>
+  th, td {
+  padding: 20px;
+  text-align: left;
+}
+.abc li {
+  list-style-type: none;
+  font-size: 25px;
+
+}
+
+button {
+  background-color: #12c064;
+  color: #f3f7cc;
+  padding: 10px 0;
+  margin: 8px 0;
+  border: none;
+  cursor: grabbing;
+  width: 90px;
+}
+button:hover {
+  color: #fff;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+  <h1><b>{{car.year}} {{ car.brand }} {{ car.model }} {{ car.trim }}</b></h1>
+  
+ 
+  {% if photos.count == 0 %}
+    <p>There is no photos of your car.<br>
+    <a href="{{ car.get_absolute_url }}add"> Click here</a> to add photos!</p>
+  {% else %}
+    <div class="slideshow-container">
+      {% for p in photos %}
+        <div class="mySlides fade">
+          <div class="numbertext"> {{ forloop.counter }} / {{photos.count}}</div>
+          <img class="d-block w-100" src="{{p.image.url}}" alt="Loading Error">
+        </div> 
+      {% endfor %}
+      
+      <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+      <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+  {% endif %}
+ 
+  <br style="padding:200px">
+  <div style="padding-left:60px">
+    <h2><b>Specs</b></h2>
+  </div>
+  <hr>
+  <table style="width:100%">
+    <tr>
+      <th>Body Style</th>
+      <td>{{car.style | capfirst}}</td>
+    </tr>
+    <tr>
+      <th>Fuel Type</th>
+      <td>{{car.fuel_type | capfirst}}</td>
+    </tr>
+    <tr>
+      <th>VIN</th>
+      <td>{{car.VIN}}</td>
+    </tr>
+    <tr>
+      <th>Exterior Color</th>
+      <td>{{car.exterior_color}}</td>
+    </tr>
+    <tr>
+      <th>Interior Color</th>
+      <td>{{car.interior_color}}</td>
+    </tr>
+    <tr>
+      <th>Engine</th>
+      <td>{{car.engine}}</td>
+    </tr>
+    <tr>
+      <th>Drivetrain</th>
+      <td>{{car.drivetrain}}</td>
+    </tr>
+    <tr>
+      <th>Horsepower</th>
+      <td>{{car.horsepower}}</td>
+    </tr>
+    <tr>
+      <th>Displacement</th>
+      <td>{{car.displacement}}</td>
+    </tr>
+    <tr>
+      <th>Cylinder</th>
+      <td>{{car.cylinder}}</td>
+    </tr>
+    <tr>
+      <th>Torque</th>
+      <td>{{car.torque}}</td>
+    </tr>
+    <tr>
+      <th>Seating</th>
+      <td>{{car.seating}}</td>
+    </tr>
+    <tr>
+      <th>City MPG</th>
+      <td>{{car.city_mpg}}</td>
+    </tr>
+    <tr>
+      <th>High Way MPG</th>
+      <td>{{car.hwy_mpg}}</td>
+    </tr>
+  </table>
+
+  <br style="padding:200px">
+  <div style="padding-left:60px">
+    <h2><b>Owner's Description</b></h2>
+  </div>
+  <hr>
+  <p style = "padding-left:15px;font-size:20px;white-space: pre-line;text-indent: 5%;">{{car.description}}</p>
+
+  <br style="padding:200px">
+  <div style="padding-left:60px">
+    <h2><b>Rating</b></h2>
+  </div>
+  <hr>
+  <div class="abc" style="padding-left:15px">
+    <h2 style="font-size:30px;"> Overall: &ensp; {{o}}</h2>
+    <pre>
+    <li> Comfort:                              {{c}}</li>
+    <li> Performance:                          {{p}}</li>
+    <li> Safety:                               {{s}}</li>
+    <li> Reliability:                          {{r}}</li>
+    </pre>
+
+  {% if new_rating %}
+  <h2>Thanks for your rating!</h2>
+  {% else %}
+    <h2>Add your rating</h2>
+    <form method="post">
+      {{ rating_form.as_p }}
+      {% csrf_token %}
+      <button class="btn btn-danger" name="Rate">Rate</button>
+      <!--<p><input type="submit" value="Add comment" name="Add comment"></p>-->
+    </form>
+  {% endif %}
+  </div>
+
+  <br style="padding:200px">
+  <div style="padding-left:60px">
+    <h2><b>Comments</b></h2>
+  </div>
+  <hr>
+  <div class="abc" style="padding-left:15px">
+  {% if comments %}
+    {% for comment in comments %}
+    <div class="comment">
+      {{ comment.body|linebreaks }}
+      <p class="date">
+        Comment by {{ comment.name }} {{ comment.created }}
+      </p>
+    </div>
+    {% endfor %}
+  {% else %}
+  <h3>There is no comments yet. Fill out the form below to add comment!</h3>
+  {% endif %}
+  {% if new_comment %}
+    <h2>Your comment has been added.</h2>
+  {% else %}
+    <h2>Add a new comment</h2>
+    <form method="post">
+      {{ comment_form.as_p }}
+      {% csrf_token %}
+      <button class="btn btn-danger" name="Add comment">Add</button>
+      <!--<p><input type="submit" value="Add comment" name="Add comment"></p>-->
+    </form>
+  {% endif %}
+  </div>
+
+  
+
+<script>
+var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+  }
+</script>
+
+{% endblock %}

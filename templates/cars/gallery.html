@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}{{car.year}} {{ car.brand }} {{ car.model }} {{ car.trim }}{% endblock %}
+
+{% block more_style %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block content %}
+  <h1><b>Car Gallery</b></h1>
+  {% if photos.count == 0 %}
+    <p>Sorry! There is no photos yet.<br>
+  {% else %}
+    <div class="slideshow-container">
+      {% for p in photos %}
+        <div class="mySlides fade">
+          <div class="numbertext"> {{ forloop.counter }} / {{photos.count}}</div>
+          <img class="d-block w-100" src="{{p.image.url}}" alt="Loading Error">
+          <div style="padding:5px">
+            <a href="{% url 'cars:product_detail' p.car.VIN %}" class="btn btn-default pull-right" style="font-size:25px">{{p.car}}</a>
+          </div>
+          
+
+        </div>
+      {% endfor %}
+      
+      <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+      <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+  {% endif %}
+
+<script>
+var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+  }
+</script>
+
+{% endblock %}

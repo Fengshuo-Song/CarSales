@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% block title %}Cars list{% endblock %}
+ {% block content %}
+<div id="sidebar">
+<a class="btn btn-success" href="{% url 'cars:car_create' %}"> <b>Add a car</b> </a>
+<a class="btn btn-success" href="{% url 'cars:car_reset' %}"> <b>Reset all cars</b> </a>
+</div>
+{% for car in car_list %}
+<h2>
+  <a href="{{ car.get_absolute_url }}">
+    {{car.year}} {{ car.brand }} {{ car.model }} {{ car.trim }}
+  </a>
+  <a href="{% url 'cars:car_update' car.pk %}" class="btn btn-default pull-right">Edit</a>
+  <a href="{% url 'cars:car_delete' car.pk %}" class="btn btn-danger pull-right">Delete</a>
+  <a href="{{ car.get_absolute_url }}add" class="btn btn-danger pull-right">Add Photos</a>
+</h2>
+{% endfor %} 
+
+
+  </div>
+  {% include "pagination.html" with page=page_obj %}
+  </div>
+  
+  {% endblock %}

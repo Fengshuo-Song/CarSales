@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Add Photos{% endblock %}
+{% block more_style %}
+<style>
+html, body {
+  display: block;
+  justify-content: center;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 15px;
+}
+form {
+  border: 5px solid #f1f1f1;
+  width: 400px;
+  height: 300px;
+}
+
+button {
+  background-color: #12c064;
+  color: #f3f7cc;
+  padding: 14px 0;
+  margin: 10px 0;
+  border: none;
+  cursor: grabbing;
+  width: 100%;
+}
+h1 {
+  text-align:center;
+  font-size:18;
+  
+}
+button:hover {
+  color: #fff;
+}
+.formcontainer {
+  text-align: left;
+  margin: 24px 50px 12px;
+}
+.container {
+  padding: 16px 0;
+  text-align:left;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<form method='POST' action="" enctype="multipart/form-data">
+{% csrf_token %}
+  <h1>Add Photos</h1>
+  <div class="formcontainer">
+  <hr>
+  <div class="container">
+    <label>Upload image</label>
+    <input required name="images" type="file" multiple class="form-control-file">
+  </div>
+  <button type="submit">Add</button>
+  </div>
+</form>
+<a href="{% url 'cars:car_list' %}" class="btn btn-dark my-3">Go Back</a>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Cars{% endblock %}
+
+{% block more_style %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+form.example input[type=text] {
+  padding: 10px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 80%;
+  background: #f1f1f1;
+}
+
+form.example button {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  background: #12c064;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none;
+  cursor: pointer;
+}
+
+form.example button:hover {
+  background: #0b7dda;
+}
+
+form.example::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+</style>
+
+
+
+{% endblock %}
+
+{% block content %}
+
+<form class="example" method=POST action="{% url 'cars:search' %}" style="margin:auto;max-width:500px">
+  {% csrf_token %}
+  <input type="text" placeholder="Search.." name="searched">
+  <button type="submit"><i class="fa fa-search"></i></button>
+</form>
+
+<div>
+  <h1>All Cars</h1>
+  <div class="row">
+    {% for car in car_list %}
+    <div class="column">
+      <h2>
+        <div style="padding-bottom:1px;">
+        <a href="{{ car.get_absolute_url }}"> 
+          <img src="{{car.image.url}}" alt="Loading Error" width="384", height="216">
+        </a>
+        </div>
+        <br>
+        <a href="{{ car.get_absolute_url }}">
+          {{car.year}} {{ car.brand }} {{ car.model }}
+        </a>
+        <br>
+        <small>{{car.mileage}} mi.</small>
+        <br>
+        <b>${{ car.price }}</b>
+      </h2>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+    
+{% endblock %}
